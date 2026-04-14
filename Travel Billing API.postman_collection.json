@@ -1,0 +1,768 @@
+{
+  "info": {
+    "_postman_id": "9437446b-8b40-40e3-a23d-4f8fc70e99ac",
+    "name": "Travel Billing API",
+    "description": "Postman collection for testing the Travel Billing API CQRS flows.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43087855"
+  },
+  "item": [
+    {
+      "name": "Create Customer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "",
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set('customerId', json.customerId);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/customers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "customers"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:28:45 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Location",
+              "value": "/customers/6256e8a5-d224-4875-a992-18cd64e9b55c"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"customerId\": \"6256e8a5-d224-4875-a992-18cd64e9b55c\"\n}"
+        },
+        {
+          "name": "Failed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers"
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:29:41 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "System.ArgumentException: Email format is invalid.\r\n   at TravelBilling.Domain.ValueObjects.Email.Create(String value) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Domain\\ValueObjects\\Email.cs:line 16\r\n   at TravelBilling.Domain.Customers.Customer.Create(String name, String email) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Domain\\Customers\\Customer.cs:line 29\r\n   at TravelBilling.Application.Customers.CreateCustomerCommandHandler.Handle(CreateCustomerCommand command, CancellationToken cancellationToken) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Application\\Customers\\Commands\\CreateCustomerCommandHandler.cs:line 13\r\n   at Program.<>c.<<<Main>$>b__0_2>d.MoveNext() in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Api\\Program.cs:line 41\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)\r\n   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<>c__DisplayClass101_2.<<HandleRequestBodyAndCompileRequestDelegateForJson>b__2>d.MoveNext()\r\n--- End of stack trace from previous location ---\r\n   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)\r\n   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)\r\n   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)\r\n\r\nHEADERS\r\n=======\r\nAccept: */*\r\nConnection: keep-alive\r\nHost: localhost:7239\r\nUser-Agent: PostmanRuntime/7.51.1\r\nAccept-Encoding: gzip, deflate, br\r\nContent-Type: application/json\r\nContent-Length: 44\r\nPostman-Token: efebc4e6-323c-475f-af39-25baeb50b6e6\r\n"
+        }
+      ]
+    },
+    {
+      "name": "Create Subscription",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "",
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set('subscriptionId', json.subscriptionId);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"planName\": \"Traveler Pro\",\n  \"recurringAmount\": 49.99,\n  \"billingCycleDays\": 30\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/subscriptions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "subscriptions"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"planName\": \"Traveler Pro\",\n  \"recurringAmount\": 49.99,\n  \"billingCycleDays\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/subscriptions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "subscriptions"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:28:57 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Location",
+              "value": "/subscriptions/758ac730-e6e8-4346-8013-91da22904281"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"subscriptionId\": \"758ac730-e6e8-4346-8013-91da22904281\"\n}"
+        },
+        {
+          "name": "Failed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"planName\": \"Traveler Pro\",\n  \"recurringAmount\": 49.99,\n  \"billingCycleDays\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/subscriptions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "subscriptions"
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:32:07 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "System.ArgumentException: Billing cycle must be greater than zero.\r\n   at TravelBilling.Domain.Subscriptions.Subscription..ctor(Guid id, Guid customerId, String planName, Decimal recurringAmount, Int32 billingCycleDays) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Domain\\Subscriptions\\Subscription.cs:line 26\r\n   at TravelBilling.Domain.Subscriptions.Subscription.Create(Guid customerId, String planName, Decimal recurringAmount, Int32 billingCycleDays) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Domain\\Subscriptions\\Subscription.cs:line 45\r\n   at TravelBilling.Application.Subscriptions.CreateSubscriptionCommandHandler.Handle(CreateSubscriptionCommand command, CancellationToken cancellationToken) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Application\\Subscriptions\\Commands\\CreateSubscription\\CreateSubscriptionCommandHandler.cs:line 25\r\n   at Program.<>c.<<<Main>$>b__0_3>d.MoveNext() in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Api\\Program.cs:line 48\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)\r\n   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<>c__DisplayClass101_2.<<HandleRequestBodyAndCompileRequestDelegateForJson>b__2>d.MoveNext()\r\n--- End of stack trace from previous location ---\r\n   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)\r\n   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)\r\n   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)\r\n\r\nHEADERS\r\n=======\r\nAccept: */*\r\nConnection: keep-alive\r\nHost: localhost:7239\r\nUser-Agent: PostmanRuntime/7.51.1\r\nAccept-Encoding: gzip, deflate, br\r\nContent-Type: application/json\r\nContent-Length: 141\r\nPostman-Token: a4eabd4e-580c-48e8-a5d4-6e79a320940b\r\n"
+        }
+      ]
+    },
+    {
+      "name": "Get Invoices By Customer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var invoices = pm.response.json();",
+              "pm.test('Invoices list is returned', function () {",
+              "  pm.expect(Array.isArray(invoices)).to.eql(true);",
+              "});",
+              "",
+              "if (invoices.length > 0) {",
+              "  pm.collectionVariables.set('invoiceId', invoices[0].invoiceId);",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/customers/{{customerId}}/invoices",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "customers",
+            "{{customerId}}",
+            "invoices"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}/invoices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers",
+                "{{customerId}}",
+                "invoices"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:32:50 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"invoiceId\": \"5f315bcf-3ea6-4413-be00-ec655899add6\",\n        \"subscriptionId\": \"a2b4b282-9444-4269-a0f4-a6cdeee3511a\",\n        \"amount\": 49.99,\n        \"status\": \"Pending\",\n        \"issuedOnUtc\": \"2026-04-14T10:32:36.1088137Z\"\n    },\n    {\n        \"invoiceId\": \"291c4bba-11f2-4045-8dd3-879494e2983e\",\n        \"subscriptionId\": \"758ac730-e6e8-4346-8013-91da22904281\",\n        \"amount\": 49.99,\n        \"status\": \"Pending\",\n        \"issuedOnUtc\": \"2026-04-14T10:28:57.8231211Z\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Pay Invoice",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/invoices/{{invoiceId}}/pay",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices",
+            "{{invoiceId}}",
+            "pay"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/invoices/{{invoiceId}}/pay",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "invoices",
+                "{{invoiceId}}",
+                "pay"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:34:29 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"invoiceId\": \"5f315bcf-3ea6-4413-be00-ec655899add6\",\n    \"status\": \"Paid\"\n}"
+        },
+        {
+          "name": "Failed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/invoices/{{invoiceId}}/pay",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "invoices",
+                "{{invoiceId}}",
+                "pay"
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:38:34 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "System.InvalidOperationException: Invoice cannot be paid twice.\r\n   at TravelBilling.Domain.Invoices.Invoice.MarkAsPaid(DateTime paidAtUtc) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Domain\\Invoices\\Invoice.cs:line 44\r\n   at TravelBilling.Application.Invoices.PayInvoiceCommandHandler.Handle(PayInvoiceCommand command, CancellationToken cancellationToken) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Application\\Invoices\\Commands\\PayInvoiceCommandHandler.cs:line 18\r\n   at Program.<>c.<<<Main>$>b__0_5>d.MoveNext()\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)\r\n   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)\r\n   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)\r\n   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)\r\n\r\nHEADERS\r\n=======\r\nAccept: */*\r\nConnection: keep-alive\r\nHost: localhost:7239\r\nUser-Agent: PostmanRuntime/7.51.1\r\nAccept-Encoding: gzip, deflate, br\r\nContent-Length: 0\r\nPostman-Token: d513fd17-6aa1-491d-b306-a97d58303c65\r\n"
+        }
+      ]
+    },
+    {
+      "name": "Cancel Subscription",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/subscriptions/{{subscriptionId}}/cancel",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "subscriptions",
+            "{{subscriptionId}}",
+            "cancel"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/subscriptions/{{subscriptionId}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "subscriptions",
+                "{{subscriptionId}}",
+                "cancel"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:39:35 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"subscriptionId\": \"a2b4b282-9444-4269-a0f4-a6cdeee3511a\",\n    \"status\": \"Cancelled\"\n}"
+        },
+        {
+          "name": "Failed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/subscriptions/{{subscriptionId}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "subscriptions",
+                "{{subscriptionId}}",
+                "cancel"
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:40:40 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "System.InvalidOperationException: Only active subscriptions can be cancelled.\r\n   at TravelBilling.Domain.Subscriptions.Subscription.Cancel(DateTime cancelledAtUtc) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Domain\\Subscriptions\\Subscription.cs:line 83\r\n   at TravelBilling.Application.Subscriptions.CancelSubscriptionCommandHandler.Handle(CancelSubscriptionCommand command, CancellationToken cancellationToken) in C:\\Users\\STAR\\source\\repos\\travelBillingApp\\travelBillingApp\\src\\TravelBilling.Application\\Subscriptions\\Commands\\CancelSubscription\\CancelSubscriptionCommandHandler.cs:line 21\r\n   at Program.<>c.<<<Main>$>b__0_4>d.MoveNext()\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)\r\n   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)\r\n   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)\r\n   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)\r\n\r\nHEADERS\r\n=======\r\nAccept: */*\r\nConnection: keep-alive\r\nHost: localhost:7239\r\nUser-Agent: PostmanRuntime/7.51.1\r\nAccept-Encoding: gzip, deflate, br\r\nContent-Length: 0\r\nPostman-Token: a8905e46-3fa0-468a-933c-f5203f88fbd9\r\n"
+        }
+      ]
+    },
+    {
+      "name": "Run Billing Cycle",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/billing/run-cycle",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "billing",
+            "run-cycle"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/billing/run-cycle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "billing",
+                "run-cycle"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:47:14 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"createdInvoices\": 1\n}"
+        },
+        {
+          "name": "Failed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/billing/run-cycle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "billing",
+                "run-cycle"
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 14 Apr 2026 10:50:21 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "System.InvalidOperationException: Subscription is not yet due for billing.\r\n   at TravelBilling.Domain.Subscriptions.Subscription.AdvanceBillingCycle(DateTime nowUtc)\r\n   at TravelBilling.Application.Subscriptions.GenerateBillingCycleInvoicesCommandHandler.Handle(GenerateBillingCycleInvoicesCommand command, CancellationToken cancellationToken)\r\n   at Program.<>c.<<<Main>$>b__0_7>d.MoveNext()\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)\r\n   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)\r\n   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)\r\n   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)\r\n\r\nHEADERS\r\n=======\r\nAccept: */*\r\nConnection: keep-alive\r\nHost: localhost:7239\r\nUser-Agent: PostmanRuntime/7.51.1\r\nAccept-Encoding: gzip, deflate, br\r\nContent-Length: 0\r\nPostman-Token: 04791dcb-1cd4-44fd-9d27-d84f4fb1ece5\r\n"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7048"
+    },
+    {
+      "key": "customerId",
+      "value": ""
+    },
+    {
+      "key": "subscriptionId",
+      "value": ""
+    },
+    {
+      "key": "invoiceId",
+      "value": ""
+    }
+  ]
+}
