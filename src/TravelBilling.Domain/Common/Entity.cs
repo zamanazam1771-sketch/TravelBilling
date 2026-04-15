@@ -1,4 +1,4 @@
-﻿namespace TravelBilling.Domain.Common;
+namespace TravelBilling.Domain.Common;
 
 public abstract class Entity
 {

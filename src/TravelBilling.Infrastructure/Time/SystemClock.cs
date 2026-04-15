@@ -1,4 +1,5 @@
-﻿using TravelBilling.Application.Abstractions;
+
+using TravelBilling.Application.Abstractions;
 
 namespace TravelBilling.Infrastructure.Time;
 

@@ -1,4 +1,5 @@
-﻿using TravelBilling.Domain.Invoices;
+﻿using TravelBilling.Domain.Customers;
+using TravelBilling.Domain.Invoices;
 using TravelBilling.Domain.Subscriptions;
 
 namespace TravelBilling.Domain.Tests;
@@ -37,6 +38,39 @@ public class SubscriptionDomainTests
         invoice.MarkAsPaid(DateTime.UtcNow);
 
         var action = () => invoice.MarkAsPaid(DateTime.UtcNow);
+
+        Assert.Throws<InvalidOperationException>(action);
+    }
+
+    [Fact]
+    public void CreateCustomer_WithInvalidEmail_ShouldThrowArgumentException()
+    {
+        var action = () => Customer.Create("Zaman", "not-an-email");
+
+        Assert.Throws<ArgumentException>(action);
+    }
+
+    [Fact]
+    public void CreateSubscription_WithInvalidRecurringAmount_ShouldThrowArgumentException()
+    {
+        var action = () => Subscription.Create(Guid.NewGuid(), "Traveler Pro", 0m, 30);
+
+        Assert.Throws<ArgumentException>(action);
+    }
+
+    [Fact]
+    public void CreateSubscription_WithInvalidBillingCycle_ShouldThrowArgumentException()
+    {
+        var action = () => Subscription.Create(Guid.NewGuid(), "Traveler Pro", 10m, 0);
+
+        Assert.Throws<ArgumentException>(action);
+    }
+
+    [Fact]
+    public void Cancel_WhenSubscriptionIsNotActive_ShouldThrowInvalidOperationException()
+    {
+        var subscription = Subscription.Create(Guid.NewGuid(), "Traveler Pro", 49.99m, 30);
+        var action = () => subscription.Cancel(DateTime.UtcNow);
 
         Assert.Throws<InvalidOperationException>(action);
     }

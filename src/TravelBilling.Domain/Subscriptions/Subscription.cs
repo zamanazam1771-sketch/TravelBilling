@@ -67,6 +67,7 @@ public sealed class Subscription : AggregateRoot
         {
             throw new InvalidOperationException("Only active subscriptions can generate invoices.");
         }
+
         if (NextBillingDateUtc is null || nowUtc < NextBillingDateUtc.Value)
         {
             throw new InvalidOperationException("Subscription is not yet due for billing.");

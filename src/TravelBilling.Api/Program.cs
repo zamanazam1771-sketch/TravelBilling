@@ -1,5 +1,10 @@
 using MediatR;
 using Microsoft.OpenApi;
+using TravelBilling.Api.Contracts.Billing;
+using TravelBilling.Api.Contracts.Customers;
+using TravelBilling.Api.Contracts.Invoices;
+using TravelBilling.Api.Contracts.Subscriptions;
+using TravelBilling.Api.Extensions;
 using TravelBilling.Application;
 using TravelBilling.Application.Customers;
 using TravelBilling.Application.Invoices;
@@ -38,34 +43,34 @@ if (app.Environment.IsDevelopment())
 
 app.MapPost("/customers", async (CreateCustomerRequest request, IMediator mediator, CancellationToken ct) =>
 {
-    var id = await mediator.Send(new CreateCustomerCommand(request.Name, request.Email), ct);
-    return Results.Created($"/customers/{id}", new { CustomerId = id });
+    var result = await mediator.Send(new CreateCustomerCommand(request.Name, request.Email), ct);
+    return result.ToHttpResult(id => Results.Created($"/customers/{id}", new { CustomerId = id }));
 })
 .WithTags("Customers");
 
 app.MapPost("/subscriptions", async (CreateSubscriptionRequest request, IMediator mediator, CancellationToken ct) =>
 {
-    var id = await mediator.Send(
+    var result = await mediator.Send(
         new CreateSubscriptionCommand(request.CustomerId, request.PlanName, request.RecurringAmount, request.BillingCycleDays), ct);
-    return Results.Created($"/subscriptions/{id}", new { SubscriptionId = id });
+    return result.ToHttpResult(id => Results.Created($"/subscriptions/{id}", new { SubscriptionId = id }));
 })
 .WithTags("Subscriptions");
 
 app.MapPost("/subscriptions/{subscriptionId:guid}/cancel", async (Guid subscriptionId, IMediator mediator, CancellationToken ct) =>
 {
-    var cancelled = await mediator.Send(new CancelSubscriptionCommand(subscriptionId), ct);
-    return cancelled
+    var result = await mediator.Send(new CancelSubscriptionCommand(subscriptionId), ct);
+    return result.IsSuccess
         ? Results.Ok(new CancelSubscriptionResponse(subscriptionId, "Cancelled"))
-        : Results.NotFound();
+        : result.ToHttpResult();
 })
 .WithTags("Subscriptions");
 
 app.MapPost("/invoices/{invoiceId:guid}/pay", async (Guid invoiceId, IMediator mediator, CancellationToken ct) =>
 {
-    var paid = await mediator.Send(new PayInvoiceCommand(invoiceId), ct);
-    return paid
+    var result = await mediator.Send(new PayInvoiceCommand(invoiceId), ct);
+    return result.IsSuccess
         ? Results.Ok(new PayInvoiceResponse(invoiceId, "Paid"))
-        : Results.NotFound();
+        : result.ToHttpResult();
 })
 .WithTags("Invoices");
 
@@ -84,9 +89,3 @@ app.MapPost("/billing/run-cycle", async (IMediator mediator, CancellationToken c
 .WithTags("Billing");
 
 app.Run();
-
-public sealed record CreateCustomerRequest(string Name, string Email);
-public sealed record CreateSubscriptionRequest(Guid CustomerId, string PlanName, decimal RecurringAmount, int BillingCycleDays);
-public sealed record CancelSubscriptionResponse(Guid SubscriptionId, string Status);
-public sealed record PayInvoiceResponse(Guid InvoiceId, string Status);
-public sealed record RunBillingCycleResponse(int CreatedInvoices);

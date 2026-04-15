@@ -1,4 +1,4 @@
-﻿namespace TravelBilling.Application.Abstractions;
+namespace TravelBilling.Application.Abstractions;
 
 public interface IClock
 {

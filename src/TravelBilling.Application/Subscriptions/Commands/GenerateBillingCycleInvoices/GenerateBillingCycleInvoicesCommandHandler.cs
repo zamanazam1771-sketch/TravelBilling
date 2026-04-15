@@ -1,7 +1,7 @@
 using MediatR;
 using TravelBilling.Application.Abstractions;
 using TravelBilling.Application.Abstractions.Repositories;
-using TravelBilling.Domain.Invoices;
+using TravelBilling.Domain.Services;
 
 namespace TravelBilling.Application.Subscriptions;
 
@@ -9,7 +9,8 @@ public sealed class GenerateBillingCycleInvoicesCommandHandler(
     ISubscriptionRepository subscriptionRepository,
     IInvoiceRepository invoiceRepository,
     IUnitOfWork unitOfWork,
-    IClock clock)
+    IClock clock,
+    ISubscriptionBillingDomainService subscriptionBillingDomainService)
     : IRequestHandler<GenerateBillingCycleInvoicesCommand, int>
 {
     public async Task<int> Handle(GenerateBillingCycleInvoicesCommand command, CancellationToken cancellationToken)
@@ -20,8 +21,7 @@ public sealed class GenerateBillingCycleInvoicesCommandHandler(
 
         foreach (var subscription in dueSubscriptions)
         {
-            subscription.AdvanceBillingCycle(now);
-            var invoice = Invoice.Generate(subscription.CustomerId, subscription.Id, subscription.RecurringAmount, now);
+            var invoice = subscriptionBillingDomainService.GenerateBillingCycleInvoice(subscription, now);
             await invoiceRepository.AddAsync(invoice, cancellationToken);
             created++;
         }
